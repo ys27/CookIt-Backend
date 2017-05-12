@@ -1,6 +1,6 @@
 var express = require('express');
 var mongojs = require('mongojs');
-var bcrypt = require('bcrypt');
+// var bcrypt = require('bcrypt');
 var router = express.Router();
 
 var db = require('./db');
@@ -37,9 +37,9 @@ router.get('/findRecipes/:_id', function(req, res, next) {
 
 //Insert User
 router.get('/add', function(req, res, next) {
-	bcrypt.hash(req.body.password, 10, function(err, hash) {
-		req.body.password = hash;
-	});
+	// bcrypt.hash(req.body.password, 10, function(err, hash) {
+	// 	req.body.password = hash;
+	// });
 	db.users.insert(req.body, function(err) {
 		if (err) {
 			res.send(err);
@@ -72,14 +72,14 @@ router.get('/login/:_id', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
-		bcrypt.compare(req.body.password, user.password, function(err, res) {
-			if (res) {
-				res.send(1);
-			}
-			else {
-				res.send(0);
-			}
-		});
+		// bcrypt.compare(req.body.password, user.password, function(err, res) {
+		// 	if (res) {
+		// 		res.send(1);
+		// 	}
+		// 	else {
+		// 		res.send(0);
+		// 	}
+		// });
 	});
 })
 
