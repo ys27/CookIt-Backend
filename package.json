@@ -1,0 +1,26 @@
+{
+  "name": "cookit",
+  "version": "1.0.0",
+  "description": "CookIt is an Android application that helps users find useful recipes.",
+  "main": "init.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ys27/CookIt-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ys27/CookIt-Backend/issues"
+  },
+  "homepage": "https://github.com/ys27/CookIt-Backend#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongojs": "^2.4.0",
+    "node": "0.0.0"
+  }
+}
