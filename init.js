@@ -10,12 +10,9 @@ var app = express();
 var port = 4000;
 
 //View Engine
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
-
-//Set Static Folder
-app.use(express.static(path.join(__dirname, 'client')));
 
 //Body Parser Middleware
 app.use(bodyParser.json());
