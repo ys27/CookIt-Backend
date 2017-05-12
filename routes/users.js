@@ -1,6 +1,6 @@
 var express = require('express');
 var mongojs = require('mongojs');
-var bcrypt = require('bcrypt');
+var sha256 = require('sha256');
 var router = express.Router();
 
 var db = require('./db');
@@ -37,9 +37,8 @@ router.get('/findRecipes/:_id', function(req, res, next) {
 
 //Insert User
 router.get('/add', function(req, res, next) {
-	bcrypt.hash(req.body.password, 10, function(err, hash) {
-		req.body.password = hash;
-	});
+	var newUserInfo = req.body;
+	newUserInfo.password = sha256(newUserInfo.password);
 	db.users.insert(req.body, function(err) {
 		if (err) {
 			res.send(err);
@@ -72,14 +71,12 @@ router.get('/login/:_id', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
-		bcrypt.compare(req.body.password, user.password, function(err, res) {
-			if (res) {
-				res.send(1);
-			}
-			else {
-				res.send(0);
-			}
-		});
+		if (sha256(req.body.password) == user.password) {
+			res.send(1);
+		}
+		else {
+			res.send(0);
+		}
 	});
 })
 
