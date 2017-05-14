@@ -17,17 +17,19 @@ router.get('/findAll', function(req, res, next) {
 
 //Get Individual User
 router.get('/find/:_id', function(req, res, next) {
-	db.users.findOne({_id: req.params._id}, function(err, user) {
+	console.log(req.params._id);
+	db.users.findOne({"_id": mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
+		console.log(user)
 		res.json(user);
 	});
 });
 
 //Get Individual User's recipes
 router.get('/findRecipes/:_id', function(req, res, next) {
-	db.users.findOne({_id: req.params._id}, function(err, user) {
+	db.users.findOne({_id: mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
@@ -49,7 +51,7 @@ router.get('/add', function(req, res, next) {
 
 //Update User
 router.get('/update/:_id', function(req, res, next) {
-	db.users.update({_id: req.params._id}, {$set: req.body}, function(err) {
+	db.users.update({_id: mongojs.ObjectID(req.params._id)}, {$set: req.body}, function(err) {
 		if (err) {
 			res.send(err);
 		}
@@ -58,7 +60,7 @@ router.get('/update/:_id', function(req, res, next) {
 
 //Delete User
 router.get('/delete/:_id', function(req, res, next) {
-	db.users.remove({_id: req.params._id}, function(err) {
+	db.users.remove({_id: mongojs.ObjectID(req.params._id)}, function(err) {
 		if (err) {
 			res.send(err);
 		}
@@ -67,7 +69,7 @@ router.get('/delete/:_id', function(req, res, next) {
 
 //Check Login
 router.get('/login/:_id', function(req, res, next) {
-	db.users.findOne({_id: req.params._id}, function(err, user) {
+	db.users.findOne({_id: mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
