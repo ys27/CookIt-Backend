@@ -6,7 +6,7 @@ var router = express.Router();
 var db = require('./db');
 
 //Get All Users
-router.get('/find/all', function(req, res, next) {
+router.get('/findAll', function(req, res, next) {
 	db.users.find(function(err, users) {
 		if (err) {
 			res.send(err);
