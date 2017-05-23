@@ -20,7 +20,20 @@ router.get('/popular', function(req, res, next) {
 		uri: host + keywords + limit,
 		method: "GET"
 	}, (error, response, body) => {
-		res.send(body);
+		var responseContainer = [];
+		var bodyJSON = JSON.parse(body);
+
+		bodyJSON.hits.forEach(function(recipeItem)
+		{
+				responseContainer.push({
+					imageURL: recipeItem.recipe.image,
+					name: recipeItem.recipe.label,
+					recipeURI: recipeItem.recipe.uri,
+					healthLabels: recipeItem.recipe.healthLabels,
+				});
+		});
+
+		res.send(JSON.stringify(responseContainer));
 	})
 });
 
