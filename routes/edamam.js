@@ -14,7 +14,7 @@ var host = `https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}`;
 
 //Get 20 Popular RecipesQQQQ
 router.get('/popular', function(req, res, next) {
-	var keywords = "&q=";
+	var keywords = "&q=popular";
 	var limit = "&from=0&to=20";
 	request({
 		uri: host + keywords + limit,
@@ -27,11 +27,13 @@ router.get('/popular', function(req, res, next) {
 		{
 				responseContainer.push({
 					imageURL: recipeItem.recipe.image,
-					name: recipeItem.recipe.label,
+					recipeName: recipeItem.recipe.label,
 					recipeURI: recipeItem.recipe.uri,
 					healthLabels: recipeItem.recipe.healthLabels,
 				});
 		});
+
+		console.log(bodyJSON);
 
 		res.send(JSON.stringify(responseContainer));
 	})
