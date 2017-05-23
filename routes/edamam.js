@@ -26,9 +26,9 @@ router.get('/popular', function(req, res, next) {
 		bodyJSON.hits.forEach(function(recipeItem)
 		{
 				responseContainer.push({
-					imageURL: recipeItem.recipe.image,
-					recipeName: recipeItem.recipe.label,
-					recipeURI: recipeItem.recipe.uri,
+					image: recipeItem.recipe.image,
+					label: recipeItem.recipe.label,
+					uri: recipeItem.recipe.uri,
 					healthLabels: recipeItem.recipe.healthLabels,
 				});
 		});
@@ -66,6 +66,16 @@ router.get('/find', function(req, res, next) {
 		res.send(body)
 	})
 });
+
+router.get('/find/:id', function(req, res, next) {
+	var recipeURI = `&r=http://www.edamam.com/ontologies/edamam.owl%23recipe_${req.params.id}`;
+	request({
+		uri: host + recipeURI,
+		method: "GET"
+	}, (error, response, body) => {
+		res.send(body)
+	})
+})
 
 var testData = {
 	keywords: ["turkey"],
