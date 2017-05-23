@@ -17,12 +17,10 @@ router.get('/findAll', function(req, res, next) {
 
 //Get Individual User
 router.get('/find/:_id', function(req, res, next) {
-	console.log(req.params._id);
 	db.users.findOne({"_id": mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
-		console.log(user)
 		res.json(user);
 	});
 });
