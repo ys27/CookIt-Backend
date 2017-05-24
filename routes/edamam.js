@@ -163,7 +163,7 @@ router.get('/findTest', function(req, res, next) {
 					calories: recipeItem.recipe.calories,
 				});
 		});
-		res.send(JSON.stringify(responseContainer));
+		res.send(JSON.stringify(responseContainer));	
 	})
 });
 
