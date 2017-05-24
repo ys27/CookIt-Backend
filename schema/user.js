@@ -3,8 +3,8 @@
 	"lastName": String,
 	"email": String,
 	"password": String,
-	"birthDay": String,
+	"birthDate": String,
 	"allergies", [String],
-	"favouriteIngredients": [String],
+	"favIngredients": [String],
 	"recipes": [String]
 }
