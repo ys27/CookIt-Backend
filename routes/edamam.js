@@ -88,25 +88,19 @@ router.get('/find/:id', function(req, res, next) {
 		uri: host + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
-		var responseContainer = [];
-		var bodyJSON = JSON.parse(body);
-
-		bodyJSON.hits.forEach(function(recipeItem)
-		{
-				responseContainer.push({
-					uri: recipeItem.recipe.uri,
-					label: recipeItem.recipe.label,
-					image: recipeItem.recipe.image,
-					url: recipeItem.recipe.url,
-					shareAs: recipeItem.recipe.shareAs,
-					yield: recipeItem.recipe.yield,
-					dietLabel: recipeItem.recipe.dietLabel,
-					healthLabel: recipeItem.recipe.healthLabel,
-					ingredientLines: recipeItem.recipe.ingredientLines,
-					calories: recipeItem.recipe.calories,
-				});
-		});
-		res.send(JSON.stringify(responseContainer));
+		var bodyJSON = JSON.parse(body)
+		res.send(JSON.stringify({
+			uri: bodyJSON[0].uri,
+			label: bodyJSON[0].label,
+			image: bodyJSON[0].image,
+			url: bodyJSON[0].url,
+			shareAs: bodyJSON[0].shareAs,
+			yield: bodyJSON[0].yield,
+			dietLabel: bodyJSON[0].dietLabel,
+			healthLabel: bodyJSON[0].healthLabel,
+			ingredientLines: bodyJSON[0].ingredientLines,
+			calories: bodyJSON[0].calories,
+		}));
 	})
 })
 
@@ -163,7 +157,7 @@ router.get('/findTest', function(req, res, next) {
 					calories: recipeItem.recipe.calories,
 				});
 		});
-		res.send(JSON.stringify(responseContainer));	
+		res.send(JSON.stringify(responseContainer));
 	})
 });
 
