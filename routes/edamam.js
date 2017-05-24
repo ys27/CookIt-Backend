@@ -66,13 +66,13 @@ router.get('/find', function(req, res, next) {
 
 router.get('/find/:uri', function(req, res, next) {
 	var recipeURI = `&r=${req.params.uri}`;
-	console.log(req.params.uri);
-	request({
-		uri: host + recipeURI,
-		method: "GET"
-	}, (error, response, body) => {
-		res.send(body)
-	})
+	res.send(req.params.uri)
+	// request({
+	// 	uri: host + recipeURI,
+	// 	method: "GET"
+	// }, (error, response, body) => {
+	// 	res.send(body)
+	// })
 })
 
 var testData = {
