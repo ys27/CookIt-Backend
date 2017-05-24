@@ -64,9 +64,8 @@ router.get('/find', function(req, res, next) {
 	})
 });
 
-router.get('/find/:uri', function(req, res, next) {
-	var uriParts = req.params.uri.split("#");
-	var recipeURI = `&r=${uriParts[0]}%23${uriParts[1]}`;
+router.get('/find/:id', function(req, res, next) {
+	var recipeURI = `&r=http://www.edamam.com/ontologies/edamam.owl%23recipe_${req.params.id}`;
 	request({
 		uri: host + recipeURI,
 		method: "GET"
