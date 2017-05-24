@@ -13,8 +13,8 @@ var app_key = '6d76b47efaeb85aba24ff109d9d82982';
 var host = `https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}`;
 
 //Get 20 Popular RecipesQQQQ
-router.get('/find/popular/:id', function(req, res, next) {
-	var keywords = `&q=${req.params.id}`;
+router.get('/find/popular/:keyword', function(req, res, next) {
+	var keywords = `&q=${req.params.keyword}`;
 	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
 		uri: host + keywords + limit,
