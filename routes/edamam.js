@@ -15,7 +15,7 @@ var host = `https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}`;
 //Get 20 Popular RecipesQQQQ
 router.get('/find/popular/:id', function(req, res, next) {
 	var keywords = `&q=${req.params.id}`;
-	var limit = "&from=0&to=20";
+	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
 		uri: host + keywords + limit,
 		method: "GET"
