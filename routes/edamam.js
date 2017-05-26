@@ -88,19 +88,24 @@ router.get('/find/:id', function(req, res, next) {
 		uri: host + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
-		var bodyJSON = JSON.parse(body)
-		res.send(JSON.stringify({
-			uri: bodyJSON[0].uri,
-			label: bodyJSON[0].label,
-			image: bodyJSON[0].image,
-			url: bodyJSON[0].url,
-			shareAs: bodyJSON[0].shareAs,
-			yield: bodyJSON[0].yield,
-			dietLabel: bodyJSON[0].dietLabel,
-			healthLabel: bodyJSON[0].healthLabel,
-			ingredientLines: bodyJSON[0].ingredientLines,
-			calories: bodyJSON[0].calories,
-		}));
+		if (!body) {
+			res.send("Nothing returned.");
+		}
+		else {
+			var bodyJSON = JSON.parse(body)
+			res.send(JSON.stringify({
+				uri: bodyJSON[0].uri,
+				label: bodyJSON[0].label,
+				image: bodyJSON[0].image,
+				url: bodyJSON[0].url,
+				shareAs: bodyJSON[0].shareAs,
+				yield: bodyJSON[0].yield,
+				dietLabel: bodyJSON[0].dietLabel,
+				healthLabel: bodyJSON[0].healthLabel,
+				ingredientLines: bodyJSON[0].ingredientLines,
+				calories: bodyJSON[0].calories,
+			}));
+		}
 	})
 })
 
