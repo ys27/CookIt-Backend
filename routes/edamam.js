@@ -50,7 +50,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 						label: recipeItem.recipe.label,
 						uri: recipeItem.recipe.uri,
 						healthLabels: recipeItem.recipe.healthLabels,
-						calories: recipeItem.recipe.calories
+						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
 					});
 			});
 			res.send(JSON.stringify(responseContainer));
