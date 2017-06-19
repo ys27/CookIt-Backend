@@ -1,6 +1,7 @@
 var request = require('request');
 var express = require('express');
 var mongojs = require('mongojs');
+var ml = require('machine_learning');
 var router = express.Router();
 
 var db = require('./db');
@@ -11,6 +12,24 @@ var https = require('https');
 var app_id = '92e8e386';
 var app_key = '6d76b47efaeb85aba24ff109d9d82982';
 var host = `https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}`;
+
+
+router.get('/find/keyword/:keyword', function(req, res, next) {
+	var keywords = `&q=${req.params.keyword}`;
+	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
+	request({
+		uri: host + keywords + limit,
+		method: "GET"
+	}, (error, response, body) => {
+		if (!error) {
+			var bodyJSON = JSON.parse(body);
+			res.send(bodyJSON);
+		}
+		else {
+			return error;
+		}
+	})
+});
 
 //Get 20 Popular RecipesQQQQ
 router.get('/find/popular/:keyword', function(req, res, next) {
@@ -120,7 +139,7 @@ router.get('/find/:id', function(req, res, next) {
 })
 
 var testData = {
-	keywords: ["turkey"],
+	keywords: ["turkey", "bacon"],
 	limit: 1,
 	diet: "low-fat",
 	health: "",

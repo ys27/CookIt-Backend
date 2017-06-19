@@ -25,16 +25,6 @@ router.get('/find/:_id', function(req, res, next) {
 	});
 });
 
-//Get Individual User's recipes
-router.get('/findRecipes/:_id', function(req, res, next) {
-	db.users.findOne({_id: mongojs.ObjectID(req.params._id)}, function(err, user) {
-		if (err) {
-			res.send(err);
-		}
-		res.json(user.recipes);
-	});
-});
-
 //Insert User
 router.get('/add', function(req, res, next) {
 	var newUserInfo = req.body;

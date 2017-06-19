@@ -5,6 +5,5 @@
 	"password": String,
 	"birthDate": String,
 	"allergies", [String],
-	"favIngredients": [String],
-	"recipes": [String]
+	"favIngredients": [String]
 }
