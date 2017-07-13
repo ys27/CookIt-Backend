@@ -66,7 +66,7 @@ router.post('/login', function(req, res, next) {
 		}
 		else {
 			if (sha256(req.body.password) == user.password) {
-				console.log("SUCCESS")
+				console.log("SUCCESS"+user._id)
 				res.send(user._id);
 			}
 			else {
