@@ -26,7 +26,7 @@ router.get('/find/:_id', function(req, res, next) {
 });
 
 //Insert User
-router.get('/add', function(req, res, next) {
+router.put('/signup', function(req, res, next) {
 	var newUserInfo = req.body;
 	newUserInfo.password = sha256(newUserInfo.password);
 	db.users.insert(req.body, function(err) {
@@ -34,11 +34,11 @@ router.get('/add', function(req, res, next) {
 			res.send(err);
 		}
 	});
-	
+
 });
 
 //Update User
-router.get('/update/:_id', function(req, res, next) {
+router.put('/update/:_id', function(req, res, next) {
 	db.users.update({_id: mongojs.ObjectID(req.params._id)}, {$set: req.body}, function(err) {
 		if (err) {
 			res.send(err);
@@ -56,18 +56,18 @@ router.get('/delete/:_id', function(req, res, next) {
 })
 
 //Check Login
-router.get('/login/:_id', function(req, res, next) {
+router.put('/login/:_id', function(req, res, next) {
 	db.users.findOne({_id: mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
 		if (sha256(req.body.password) == user.password) {
-			res.send(1);
+			res.send(true);
 		}
 		else {
-			res.send(0);
+			res.send(false);
 		}
 	});
-})
+});
 
 module.exports = router;

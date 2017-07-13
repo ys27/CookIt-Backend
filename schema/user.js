@@ -1,9 +1,7 @@
 {
-	"fistName": String,
-	"lastName": String,
+	"name": String,
 	"email": String,
 	"password": String,
-	"birthDate": String,
 	"allergies", [String],
 	"favIngredients": [String]
 }

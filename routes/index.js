@@ -6,12 +6,6 @@ var db = require('./db');
 
 //Get All Users
 router.get('/', function(req, res, next) {
-	// db.users.find(function(err, users) {
-	// 	if (err) {
-	// 		res.send(err);
-	// 	}
-	// 	res.json(users);
-	// });
 	res.render('index.html');
 });
 

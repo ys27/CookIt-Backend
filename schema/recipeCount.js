@@ -1,0 +1,4 @@
+{
+	recipeId: String,
+    recipeCount: int
+}

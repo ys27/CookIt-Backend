@@ -23,6 +23,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 	}, (error, response, body) => {
 		if (!error) {
 			var bodyJSON = JSON.parse(body);
+			sortByCount(bodyJSON);
 			res.send(bodyJSON);
 		}
 		else {
@@ -61,7 +62,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 	})
 });
 
-router.get('/find', function(req, res, next) {
+router.put('/find', function(req, res, next) {
 	var keywords = "";
 	for (var i=0; i<req.body.keywords.length; i++) {
 		keywords += `&q=${req.body.keywords[i]}`;
@@ -200,5 +201,18 @@ router.get('/findTest', function(req, res, next) {
 		}
 	})
 });
+
+function sortByCount(json) {
+	console.log("sorting")
+	var recipes = json.hits;
+	for (var i=0; i<recipes.length; i++) {
+		var index = recipes[i].uri.indexOf("recipe_");
+		console.log("I"+index);
+		var index2 = recipes[i].uri.indexOf("http");
+		console.log("http"+index2);
+		// var recipeId = recipes[i].uri.substring()
+		// if (db.recipeCounts.findOne({"recipeId": recipeId}) != null)
+	}
+}
 
 module.exports = router;
