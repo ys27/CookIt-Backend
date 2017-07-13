@@ -23,7 +23,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 	}, (error, response, body) => {
 		if (!error) {
 			var bodyJSON = JSON.parse(body);
-			sortByCount(bodyJSON);
+			// sortByCount(bodyJSON);
 			res.send(bodyJSON);
 		}
 		else {
