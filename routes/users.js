@@ -58,6 +58,7 @@ router.get('/delete/:_id', function(req, res, next) {
 
 //Check Login
 router.put('/login', function(req, res, next) {
+	console.log(req.body.email);
 	db.users.findOne({"email": req.body.email}, function(err, user) {
 		if (err) {
 			res.send(err);
