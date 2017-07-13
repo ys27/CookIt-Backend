@@ -209,18 +209,23 @@ function sortByCount(json) {
 	for (var i=0; i<recipes.length; i++) {
 		var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
 		var recipeId = recipes[i].recipe.uri.substring(index);
-		console.log(recipeId)
-		db.recipeCounts.findOne({"recipeId": recipeId}, function(err, recipeCount) {
+		db.recipeCounts.findOne({"recipeId": recipeId}, function (err, recipeCount) {
 			if (err) {
 				res.send(err);
 			}
-			else {
-				if (recipeCount != null) {
-					console.log(recipeCount);
-				}
+			if (recipeCount != null) {
+				console.log(recipeCount)
+				countArray.push({
+					recipeCount: recipeCount,
+					index: i
+				});
 			}
 		});
 	}
+	countArray.sort(function(a,b) {
+		return a.recipeCount.recipeCount - b.recipeCount.recipeCount;
+	});
+	console.log(countArray)
 };
 
 Array.prototype.move = function (old_index, new_index) {
