@@ -62,20 +62,19 @@ router.post('/login', function(req, res, next) {
 	db.users.findOne({"email": req.body.email}, function(err, user) {
 		if (err) {
 			console.log("error")
-			res.send(err);
+			res.end(err);
 		}
 		else {
 			if (sha256(req.body.password) == user.password) {
 				console.log("SUCCESS"+user._id)
-				res.send(user._id);
+				res.end(user._id);
 			}
 			else {
 				console.log("FAILURE")
-				res.send(null);
+				res.end(null);
 			}
 		}
 	});
-	// res.write(response.statusCode.toString());
 });
 
 module.exports = router;
