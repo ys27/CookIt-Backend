@@ -29,21 +29,29 @@ router.get('/get/:recipeId', function(req, res, next) {
 
 //Insert New or increment count
 router.get('/seen/:recipeId', function(req, res, next) {
-    if (db.recipeCounts.findOne({"recipeId": req.params.recipeId}) != null) {
-        db.recipeCounts.update({"recipeId": req.params.recipeId}, {
-            $inc: {
-                recipeCount: seenRecipePoints
-            }
-        });
-    }
-    else {
-        db.recipeCounts.insert(
-            {
-                recipeId: req.params.recipeId,
-                recipeCount: seenRecipePoints
-            }
-        );
-    }
+	db.recipeCounts.findOne({"recipeId": req.params.recipeId}, function(err, recipeCount) {
+		if (err) {
+			res.send(err);
+		}
+		else {
+			if (recipeCount == null) {
+				db.recipeCounts.insert(
+		            {
+		                recipeId: req.params.recipeId,
+		                recipeCount: seenRecipePoints
+		            }
+		        );
+			}
+			else {
+				db.recipeCounts.update({"recipeId": req.params.recipeId}, {
+		            $inc: {
+		                recipeCount: seenRecipePoints
+		            }
+		        });
+			}
+			res.send("seen");
+		}
+	});
 });
 
 router.get('/used/:recipeId', function(req, res, next) {
@@ -52,6 +60,7 @@ router.get('/used/:recipeId', function(req, res, next) {
             recipeCount: usedRecipePoints - seenRecipePoints
         }
     });
+	res.send("used");
 });
 
 router.get('/unused/:recipeId', function(req, res, next) {
@@ -60,16 +69,19 @@ router.get('/unused/:recipeId', function(req, res, next) {
             recipeCount: seenRecipePoints - usedRecipePoints
         }
     });
+	res.send("unused");
 });
 
 //Reset Recipe Count
 router.get('/reset/:recipeId', function(req, res, next) {
 	db.recipeCounts.remove({"recipeId": req.params.recipeId});
+	res.send("reset counts for: " + req.params.recipeI);
 });
 
 //Reset All Recipe Counts
 router.get('/resetAll/', function(req, res, next) {
 	db.recipeCounts.remove({});
+	res.send("reset counts for all");
 });
 
 module.exports = router;

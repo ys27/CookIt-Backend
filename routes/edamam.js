@@ -204,15 +204,35 @@ router.get('/findTest', function(req, res, next) {
 
 function sortByCount(json) {
 	console.log("sorting")
+	var countArray = [];
 	var recipes = json.hits;
 	for (var i=0; i<recipes.length; i++) {
-		var index = recipes[i].uri.indexOf("recipe_");
-		console.log("I"+index);
-		var index2 = recipes[i].uri.indexOf("http");
-		console.log("http"+index2);
-		// var recipeId = recipes[i].uri.substring()
-		// if (db.recipeCounts.findOne({"recipeId": recipeId}) != null)
+		var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
+		var recipeId = recipes[i].recipe.uri.substring(index);
+		console.log(recipeId)
+		db.recipeCounts.findOne({"recipeId": recipeId}, function(err, recipeCount) {
+			if (err) {
+				res.send(err);
+			}
+			else {
+				if (recipeCount != null) {
+					console.log(recipeCount);
+				}
+			}
+		});
 	}
-}
+};
+
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
+};
+
 
 module.exports = router;
