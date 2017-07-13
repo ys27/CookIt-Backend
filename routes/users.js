@@ -7,7 +7,6 @@ var db = require('./db');
 
 //Get All Users
 router.get('/findAll', function(req, res, next) {
-	console.log(sha256("qwert123"))
 	db.users.find(function(err, users) {
 		if (err) {
 			res.send(err);
@@ -57,19 +56,24 @@ router.get('/delete/:_id', function(req, res, next) {
 })
 
 //Check Login
-router.put('/login', function(req, res, next) {
-	console.log(req.body.email);
-	db.users.findOne({"email": req.body.email}, function(err, user) {
-		if (err) {
-			res.send(err);
-		}
-		if (sha256(req.body.password) == user.password) {
-			res.send(true);
-		}
-		else {
-			res.send(false);
-		}
-	});
+router.post('/login', function(req, res, next) {
+	console.log("BODY"+req.body);
+	console.log("EMAIL"+req.body.email);
+	console.log("PASSWORD"+req.body.password);
+	// db.users.findOne({"email": req.body.email}, function(err, user) {
+	// 	if (err) {
+	// 		res.send(err);
+	// 	}
+	// 	else {
+	// 		if (sha256(req.body.password) == user.password) {
+	// 			res.send(user._id);
+	// 		}
+	// 		else {
+	// 			res.send(null);
+	// 		}
+	// 	}
+	// });
+	// res.write(response.statusCode.toString());
 });
 
 module.exports = router;
