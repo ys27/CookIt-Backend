@@ -47,21 +47,19 @@ router.get('/seen/:recipeId', function(req, res, next) {
 });
 
 router.get('/used/:recipeId', function(req, res, next) {
-    if (db.recipeCounts.findOne({"recipeId": req.params.recipeId}) != null) {
-        db.recipeCounts.update({"recipeId": req.params.recipeId}, {
-            $inc: {
-                recipeCount: usedRecipePoints
-            }
-        });
-    }
-    else {
-        db.recipeCounts.insert(
-            {
-                recipeId: req.params.recipeId,
-                recipeCount: usedRecipePoints
-            }
-        );
-    }
+    db.recipeCounts.update({"recipeId": req.params.recipeId}, {
+        $inc: {
+            recipeCount: usedRecipePoints - seenRecipePoints
+        }
+    });
+});
+
+router.get('/unused/:recipeId', function(req, res, next) {
+    db.recipeCounts.update({"recipeId": req.params.recipeId}, {
+        $inc: {
+            recipeCount: seenRecipePoints - usedRecipePoints
+        }
+    });
 });
 
 //Reset Recipe Count
