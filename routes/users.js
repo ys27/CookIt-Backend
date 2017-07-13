@@ -57,22 +57,21 @@ router.get('/delete/:_id', function(req, res, next) {
 
 //Check Login
 router.post('/login', function(req, res, next) {
-	console.log("BODY"+req.body);
 	console.log("EMAIL"+req.body.email);
 	console.log("PASSWORD"+req.body.password);
-	// db.users.findOne({"email": req.body.email}, function(err, user) {
-	// 	if (err) {
-	// 		res.send(err);
-	// 	}
-	// 	else {
-	// 		if (sha256(req.body.password) == user.password) {
-	// 			res.send(user._id);
-	// 		}
-	// 		else {
-	// 			res.send(null);
-	// 		}
-	// 	}
-	// });
+	db.users.findOne({"email": req.body.email}, function(err, user) {
+		if (err) {
+			res.send(err);
+		}
+		else {
+			if (sha256(req.body.password) == user.password) {
+				res.send(user._id);
+			}
+			else {
+				res.send(null);
+			}
+		}
+	});
 	// res.write(response.statusCode.toString());
 });
 
