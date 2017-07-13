@@ -1,7 +1,7 @@
 var request = require('request');
 var express = require('express');
 var mongojs = require('mongojs');
-// var ml = require('machine_learning');
+var ml = require('machine_learning');
 var router = express.Router();
 
 var db = require('./db');
@@ -23,7 +23,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 	}, (error, response, body) => {
 		if (!error) {
 			var bodyJSON = JSON.parse(body);
-			// sortByCount(bodyJSON);
+			sortByCount(bodyJSON);
 			res.send(bodyJSON);
 		}
 		else {

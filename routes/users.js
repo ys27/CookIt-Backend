@@ -7,6 +7,7 @@ var db = require('./db');
 
 //Get All Users
 router.get('/findAll', function(req, res, next) {
+	console.log(sha256("qwert123"))
 	db.users.find(function(err, users) {
 		if (err) {
 			res.send(err);
@@ -56,8 +57,8 @@ router.get('/delete/:_id', function(req, res, next) {
 })
 
 //Check Login
-router.put('/login/:_id', function(req, res, next) {
-	db.users.findOne({_id: mongojs.ObjectID(req.params._id)}, function(err, user) {
+router.put('/login', function(req, res, next) {
+	db.users.findOne({"email": req.body.email}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
