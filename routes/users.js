@@ -57,21 +57,16 @@ router.get('/delete/:_id', function(req, res, next) {
 
 //Check Login
 router.post('/login', function(req, res, next) {
-	console.log("EMAIL"+req.body.email);
-	console.log("PASSWORD"+req.body.password);
 	db.users.findOne({"email": req.body.email}, function(err, user) {
 		if (err) {
-			console.log("error")
 			res.send(err);
 		}
 		else {
 			if (sha256(req.body.password) == user.password) {
-				console.log("SUCCESS"+user._id)
 				res.json(user);
 			}
 			else {
-				console.log("FAILURE")
-				res.json(null);
+				res.json({});
 			}
 		}
 	});
