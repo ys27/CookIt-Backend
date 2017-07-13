@@ -67,11 +67,11 @@ router.post('/login', function(req, res, next) {
 		else {
 			if (sha256(req.body.password) == user.password) {
 				console.log("SUCCESS"+user._id)
-				res.send(user._id);
+				res.json(user._id);
 			}
 			else {
 				console.log("FAILURE")
-				res.send(null);
+				res.json(null);
 			}
 		}
 	});
