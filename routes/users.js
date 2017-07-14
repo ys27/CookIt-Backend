@@ -28,21 +28,26 @@ router.get('/find/:_id', function(req, res, next) {
 //Insert User
 router.post('/signup', function(req, res, next) {
 	var newUserInfo = req.body;
+	console.log(newUserInfo)
 	newUserInfo.password = sha256(newUserInfo.password);
 	db.users.findOne({"email": newUserInfo.email}, function(err, user) {
 		if (err) {
 			res.send(err);
 		}
 		if (user == null) {
+			console.log("USER DOES NOT EXIST YET")
 			db.users.insert(newUserInfo, function(err) {
 				if (err) {
 					res.send(err);
-				} else {
+				}
+				else {
+					console.log("SIGNUP SUCCESSFUL")
 					res.json(user);
 				}
 			});
 		}
 		else {
+			console.log("EMAIL IN USE");
 			res.json({error: "This email is already in use."});
 		}
 	});
@@ -82,7 +87,7 @@ router.post('/login', function(req, res, next) {
 			}
 			else {
 				console.log("WRONG PASSWORD")
-				res.json({});
+				res.json({error: "Wrong Password"});
 			}
 		}
 		else {
