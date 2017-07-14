@@ -42,6 +42,7 @@ router.post('/signup', function(req, res, next) {
 				}
 				else {
 					console.log("SIGNUP SUCCESSFUL")
+					console.log("USER FEEDBACK:", user);
 					res.json(user);
 				}
 			});
