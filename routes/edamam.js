@@ -142,7 +142,8 @@ router.get('/find/:id', function(req, res, next) {
 		uri: host + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
-		if (!error && !body.starsWith("<")) {
+		console.log("TYPE",typeof body)
+		if (!error && !body.startsWith("<")) {
 			var bodyJSON = JSON.parse(body)
 			res.send(JSON.stringify({
 				uri: bodyJSON[0].uri,
@@ -158,7 +159,7 @@ router.get('/find/:id', function(req, res, next) {
 			}));
 		}
 		else {
-			return error;
+			res.json({error: "No return from API"});
 		}
 	})
 });
