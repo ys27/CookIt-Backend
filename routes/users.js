@@ -29,14 +29,24 @@ router.get('/find/:_id', function(req, res, next) {
 router.put('/signup', function(req, res, next) {
 	var newUserInfo = req.body;
 	newUserInfo.password = sha256(newUserInfo.password);
-	db.users.insert(req.body, function(err) {
+	db.users.findOne({"email": newUserInfo.email}, function(err, user) {
 		if (err) {
 			res.send(err);
-		} else {
-			res.json({});
+		}
+		if (user == null) {
+			db.users.insert(newUserInfo, function(err) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.json({});
+				}
+			});
+			res.send("Signed up user");
+		}
+		else {
+			res.send("This email is already in use.");
 		}
 	});
-	res.send("signed up user");
 });
 
 //Update User

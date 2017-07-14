@@ -149,38 +149,69 @@ router.get('/find/:id', function(req, res, next) {
 	})
 });
 
-function sortByCount(json) {
+async function sortByCount(json) {
 	console.log("beginning sorting")
-	var countArray = readInCount(json.hits);
-	var sortedCountArray = sortCountArray(countArray);
-	var mergedCountArray = mergeCountArray(json.hits, sortedCountArray);
-	return mergedCountArray;
+	var countArray = await readInCount(json.hits);
+	// var sortedCountArray = await sortCountArray(countArray);
+	// return mergedCountArray = await mergeCountArray(json.hits, sortedCountArray);
 }
 
-function readInCount(recipes) {
+async function readInCount(recipes) {
 	var countArray = [];
-	for (var i=0; i<recipes.length; i++) {
-		var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
-		var recipeId = recipes[i].recipe.uri.substring(index);
-		db.recipeCounts.findOne({"recipeId": recipeId}, function (err, recipeCount) {
-			if (err) {
-				res.send(err);
-			}
-			if (recipeCount != null) {
-				console.log(recipeCount, i)
-				countArray.push({
-					recipeCount: recipeCount,
-					index: i
+	async.series([
+	    function(callback) {
+			async.eachOfSeries(recipes, function (recipe, i, next) {
+				var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
+				var recipeId = recipes[i].recipe.uri.substring(index);
+				db.recipeCounts.findOne({"recipeId": recipeId}, function (err, recipeCount) {
+					if (err) {
+						res.send(err);
+					}
+					if (recipeCount != null) {
+						console.log(recipeCount, i)
+						countArray.push({
+							recipeCount: recipeCount,
+							index: i
+						});
+					}
+					i++;
+					next();
 				});
-			}
-		});
-	}
-	return countArray;
+			}, function (err) {
+			    console.log("Done Reading");
+				callback(null)
+			});
+	    },
+	    function(callback) {
+			countArray.sort(function(a,b) {
+				return b.recipeCount.recipeCount - a.recipeCount.recipeCount;
+			});
+	        // do some more stuff ...
+	        callback(null);
+	    },
+	    function(callback) {
+			console.log("C", countArray)
+			async.eachOfSeries(countArray, function (count, i, next) {
+				recipes.move(countArray[i].index+i, i);
+				i++;
+				next();
+			}, function (err) {
+			    console.log("Done Sorting");
+				callback(null, recipes)
+			});
+	    }
+	],
+	// optional callback
+	function(err, recipes) {
+		console.log(recipes[2])
+		return recipes[2];
+	    // results is now equal to ['one', 'two']
+	});
 };
 
 function sortCountArray(countArray) {
 	return sortedCountArray = countArray.sort(function(a,b) {
-		return a.recipeCount.recipeCount - b.recipeCount.recipeCount;
+		return b.recipeCount.recipeCount - a.recipeCount.recipeCount;
 	});
 }
 
