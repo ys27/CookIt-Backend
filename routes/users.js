@@ -41,10 +41,10 @@ router.put('/signup', function(req, res, next) {
 					res.json({});
 				}
 			});
-			res.send("Signed up user");
+			res.json(user);
 		}
 		else {
-			res.send("This email is already in use.");
+			res.json({error: "This email is already in use."});
 		}
 	});
 });

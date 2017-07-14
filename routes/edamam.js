@@ -158,6 +158,7 @@ async function sortByCount(json) {
 
 async function readInCount(recipes) {
 	var countArray = [];
+	var sortedRecipe = [];
 	async.series([
 	    function(callback) {
 			async.eachOfSeries(recipes, function (recipe, i, next) {
@@ -201,12 +202,15 @@ async function readInCount(recipes) {
 			});
 	    }
 	],
-	// optional callback
 	function(err, recipes) {
 		console.log(recipes[2])
-		return recipes[2];
-	    // results is now equal to ['one', 'two']
+		sortedRecipe = recipes[2];
 	});
+	while (sortedRecipe.length == 0) {
+		if (sortedRecipe.length > 0) {
+			return sortedRecipe;
+		}
+	}
 };
 
 function sortCountArray(countArray) {
