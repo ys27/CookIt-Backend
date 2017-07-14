@@ -77,13 +77,16 @@ router.post('/login', function(req, res, next) {
 		}
 		else if (user != null){
 			if (sha256(req.body.password) == user.password) {
+				console.log("LOGIN SUCCESSFUL")
 				res.json(user);
 			}
 			else {
+				console.log("WRONG PASSWORD")
 				res.json({});
 			}
 		}
 		else {
+			console.log("NOT AN EXISTING USER")
 			res.json({error: "Not an existing user"});
 		}
 	});
