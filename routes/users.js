@@ -34,7 +34,7 @@ router.put('/signup', function(req, res, next) {
 			res.send(err);
 		}
 	});
-
+	res.send("signed up user");
 });
 
 //Update User
@@ -43,6 +43,7 @@ router.put('/update/:_id', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
+		res.send("updated user" + req.params._id);
 	});
 });
 
@@ -52,6 +53,7 @@ router.get('/delete/:_id', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
+		res.send("deleted user" + req.params._id);
 	});
 })
 
