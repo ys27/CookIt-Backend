@@ -23,8 +23,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 		method: "GET"
 	}, (error, response, body) => {
 		if (!error) {
-			var bodyJSON = sortByCount(JSON.parse(body));
-			res.send(bodyJSON);
+			sortByCount(res, JSON.parse(body));
 		}
 		else {
 			return error;
@@ -54,7 +53,8 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
 					});
 			});
-			res.send(JSON.stringify(responseContainer));
+			sortByCount(res, JSON.stringify(responseContainer));
+			// res.send(JSON.stringify(responseContainer));
 		}
 		else {
 			return error;
@@ -114,7 +114,8 @@ router.put('/find', function(req, res, next) {
 						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
 					});
 			});
-			res.send(JSON.stringify(responseContainer));
+			// res.send(JSON.stringify(responseContainer));
+			sortByCount(res, JSON.stringify(responseContainer));
 		}
 		else {
 			return error;
@@ -149,11 +150,10 @@ router.get('/find/:id', function(req, res, next) {
 	})
 });
 
-function sortByCount(json) {
+function sortByCount(res, json) {
 	console.log("beginning sorting")
 	var recipes = json.hits
 	var countArray = [];
-	var sortedRecipe = [];
 	async.series([
 	    function(callback) {
 			async.eachOfSeries(recipes, function (recipe, i, next) {
@@ -164,7 +164,6 @@ function sortByCount(json) {
 						res.send(err);
 					}
 					if (recipeCount != null) {
-						console.log(recipeCount, i)
 						countArray.push({
 							recipeCount: recipeCount,
 							index: i
@@ -182,11 +181,9 @@ function sortByCount(json) {
 			countArray.sort(function(a,b) {
 				return b.recipeCount.recipeCount - a.recipeCount.recipeCount;
 			});
-	        // do some more stuff ...
 	        callback(null);
 	    },
 	    function(callback) {
-			console.log("C", countArray)
 			async.eachOfSeries(countArray, function (count, i, next) {
 				recipes.move(countArray[i].index+i, i);
 				i++;
@@ -198,14 +195,9 @@ function sortByCount(json) {
 	    }
 	],
 	function(err, recipes) {
-		console.log(recipes[2])
-		sortedRecipe = recipes[2];
+		res.send(recipes[2])
+		// return recipes[2];
 	});
-	while (sortedRecipe.length == 0) {
-		if (sortedRecipe.length > 0) {
-			return sortedRecipe;
-		}
-	}
 };
 
 Array.prototype.move = function (old_index, new_index) {
