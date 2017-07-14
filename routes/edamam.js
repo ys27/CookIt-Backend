@@ -81,10 +81,10 @@ router.put('/find', function(req, res, next) {
 		keywords += `&q=${req.body.keywords[i]}`;
 	}
 	var limit = req.body.limit ? `&from=0&to=${req.body.limit}` : "";
-	for (var i=0; i<req.body.diet.length; i++) {
+	for (var i=0; i<req.body.diet ? req.body.diet.length : 0; i++) {
 		diet += `&diet=${req.body.diet[i]}`;
 	}
-	for (var i=0; i<req.body.health.length; i++) {
+	for (var i=0; i<req.body.health.length || 0; i++) {
 		health += `&health=${req.body.health[i]}`;
 	}
 	var calories = "";
