@@ -32,6 +32,8 @@ router.put('/signup', function(req, res, next) {
 	db.users.insert(req.body, function(err) {
 		if (err) {
 			res.send(err);
+		} else {
+			res.json({});
 		}
 	});
 
