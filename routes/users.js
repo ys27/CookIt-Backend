@@ -54,6 +54,32 @@ router.post('/signup', function(req, res, next) {
 	});
 });
 
+router.post('/fbLogin', function(req, res, next) {
+	var newUserInfo = req.body;
+	console.log(newUserInfo);
+	db.users.findOne({"email": newUserInfo.email}, function(err, user) {
+		if (err) {
+			res.send(err);
+		}
+		if (user == null) {
+			console.log("USER DOES NOT EXIST YET")
+			db.users.insert(newUserInfo, function(err, user) {
+				if (err) {
+					res.send(err);
+				}
+				else {
+					console.log("SIGNUP SUCCESSFUL")
+					console.log("USER FEEDBACK:", user);
+					res.json(user);
+				}
+			});
+		}
+		else {
+			res.json(user);
+		}
+	});
+});
+
 //Update User
 router.put('/update/:_id', function(req, res, next) {
 	db.users.update({_id: mongojs.ObjectID(req.params._id)}, {$set: req.body}, function(err) {
