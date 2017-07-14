@@ -112,6 +112,10 @@ router.post('/login', function(req, res, next) {
 				console.log("LOGIN SUCCESSFUL")
 				res.json(user);
 			}
+			else if (!user.password) {
+				console.log("FACEBOOK LOGIN")
+				res.json({error: "Log in using Facebook."});
+			}
 			else {
 				console.log("WRONG PASSWORD")
 				res.json({error: "Wrong Password"});
