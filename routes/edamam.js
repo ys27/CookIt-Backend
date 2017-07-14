@@ -68,8 +68,12 @@ router.put('/find', function(req, res, next) {
 		keywords += `&q=${req.body.keywords[i]}`;
 	}
 	var limit = req.body.limit ? `&from=0&to=${req.body.limit}` : "";
-	var diet = req.body.diet ? `&diet=${req.body.diet}` : "";
-	var health = req.body.health ? `&health=${req.body.health}` : "";
+	for (var i=0; i<req.body.diet.length; i++) {
+		diet += `&diet=${req.body.diet[i]}`;
+	}
+	for (var i=0; i<req.body.health.length; i++) {
+		health += `&health=${req.body.health[i]}`;
+	}
 	var calories = "";
 	if (req.body.calories) {
 		if (req.body.calories.lower) {
@@ -138,68 +142,6 @@ router.get('/find/:id', function(req, res, next) {
 				ingredientLines: bodyJSON[0].ingredientLines,
 				calories: bodyJSON[0].calories,
 			}));
-		}
-		else {
-			return error;
-		}
-	})
-})
-
-var testData = {
-	keywords: ["turkey", "bacon"],
-	limit: 1,
-	diet: "low-fat",
-	health: "",
-	calories: {
-		lower: 100,
-		upper: 2000
-	}
-}
-
-router.get('/findTest', function(req, res, next) {
-	var keywords = "";
-	for (var i=0; i<testData.keywords.length; i++) {
-		keywords += `&q=${testData.keywords[i]}`;
-	}
-	var limit = testData.limit ? `&from=0&to=${testData.limit}` : "";
-	var diet = testData.diet ? `&diet=${testData.diet}` : "";
-	var health = testData.health ? `&health=${testData.health}` : "";
-	var calories = "";
-	if (testData.calories) {
-		if (testData.calories.lower) {
-			calories = `&calories=gte%20${testData.calories.lower}`;
-			calories += testData.calories.upper ? `,%20lte%20${testData.calories.upper}` : "";
-		}
-		else if (testData.calories.upper) {
-			calories = `&calories=lte%20${testData.calories.upper}`;
-		}
-
-	}
-	var requestURL = host + keywords + limit + diet + health + calories;
-	request({
-		uri: requestURL,
-		method: "GET"
-	}, (error, response, body) => {
-		if (!error) {
-			var responseContainer = [];
-			var bodyJSON = JSON.parse(body);
-
-			bodyJSON.hits.forEach(function(recipeItem)
-			{
-					responseContainer.push({
-						uri: recipeItem.recipe.uri,
-						label: recipeItem.recipe.label,
-						image: recipeItem.recipe.image,
-						url: recipeItem.recipe.url,
-						shareAs: recipeItem.recipe.shareAs,
-						yield: recipeItem.recipe.yield,
-						dietLabel: recipeItem.recipe.dietLabel,
-						healthLabel: recipeItem.recipe.healthLabel,
-						ingredientLines: recipeItem.recipe.ingredientLines,
-						calories: recipeItem.recipe.calories,
-					});
-			});
-			res.send(JSON.stringify(responseContainer));
 		}
 		else {
 			return error;
