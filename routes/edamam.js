@@ -79,67 +79,72 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 });
 
 router.put('/find', function(req, res, next) {
-	var keywords = "";
-	for (var i=0; i<req.body.keywords.length; i++) {
-		keywords += `&q=${req.body.keywords[i]}`;
+	if (!keywords) {
+		res.json({error: "Search requires at least one keyword."})
 	}
-	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
-	var diet = "";
-	for (var i=0; i<req.body.diet ? req.body.diet.length : 0; i++) {
-		diet += `&diet=${req.body.diet[i]}`;
-	}
-	var health = "";
-	for (var i=0; i<req.body.health ? req.body.health.length : 0; i++) {
-		health += `&health=${req.body.health[i]}`;
-	}
-	var calories = "";
-	if (req.body.calories) {
-		if (req.body.calories.lower) {
-			calories = `&calories=gte%20${req.body.calories.lower}`;
-			calories += req.body.calories.upper ? `,%20lte%20${req.body.calories.upper}` : "";
+	else {
+		var keywords = "&q=";
+		for (var i=0; i<req.body.keywords.length; i++) {
+			keywords += `${req.body.keywords[i]},`;
 		}
-		else if (req.body.calories.upper) {
-			calories = `&calories=lte%20${req.body.calories.upper}`;
+		var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
+		var diet = "";
+		for (var i=0; i<req.body.diet ? req.body.diet.length : 0; i++) {
+			diet += `&diet=${req.body.diet[i]}`;
 		}
+		var health = "";
+		for (var i=0; i<req.body.health ? req.body.health.length : 0; i++) {
+			health += `&health=${req.body.health[i]}`;
+		}
+		var calories = "";
+		if (req.body.calories) {
+			if (req.body.calories.lower) {
+				calories = `&calories=gte%20${req.body.calories.lower}`;
+				calories += req.body.calories.upper ? `,%20lte%20${req.body.calories.upper}` : "";
+			}
+			else if (req.body.calories.upper) {
+				calories = `&calories=lte%20${req.body.calories.upper}`;
+			}
 
-	}
-	var requestURL = host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit + diet + health + calories;
-	request({
-		uri: requestURL,
-		method: "GET"
-	}, (error, response, body) => {
-		toggleKey();
-		if (!error && !body.startsWith("<")) {
-			var responseContainer = [];
-			var bodyJSON = JSON.parse(body);
+		}
+		var requestURL = host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit + diet + health + calories;
+		request({
+			uri: requestURL,
+			method: "GET"
+		}, (error, response, body) => {
+			toggleKey();
+			if (!error && !body.startsWith("<")) {
+				var responseContainer = [];
+				var bodyJSON = JSON.parse(body);
 
-			bodyJSON.hits.forEach(function(recipeItem)
-			{
-					responseContainer.push({
-						// uri: recipeItem.recipe.uri,
-						// label: recipeItem.recipe.label,
-						// image: recipeItem.recipe.image,
-						// url: recipeItem.recipe.url,
-						// shareAs: recipeItem.recipe.shareAs,
-						// yield: recipeItem.recipe.yield,
-						// dietLabel: recipeItem.recipe.dietLabel,
-						// healthLabel: recipeItem.recipe.healthLabel,
-						// ingredientLines: recipeItem.recipe.ingredientLines,
-						// calories: recipeItem.recipe.calories,
-						image: recipeItem.recipe.image,
-						label: recipeItem.recipe.label,
-						uri: recipeItem.recipe.uri,
-						healthLabels: recipeItem.recipe.healthLabels,
-						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
-					});
-			});
-			// res.send(JSON.stringify(responseContainer));
-			sortByCount(res, responseContainer);
-		}
-		else {
-			return error;
-		}
-	})
+				bodyJSON.hits.forEach(function(recipeItem)
+				{
+						responseContainer.push({
+							// uri: recipeItem.recipe.uri,
+							// label: recipeItem.recipe.label,
+							// image: recipeItem.recipe.image,
+							// url: recipeItem.recipe.url,
+							// shareAs: recipeItem.recipe.shareAs,
+							// yield: recipeItem.recipe.yield,
+							// dietLabel: recipeItem.recipe.dietLabel,
+							// healthLabel: recipeItem.recipe.healthLabel,
+							// ingredientLines: recipeItem.recipe.ingredientLines,
+							// calories: recipeItem.recipe.calories,
+							image: recipeItem.recipe.image,
+							label: recipeItem.recipe.label,
+							uri: recipeItem.recipe.uri,
+							healthLabels: recipeItem.recipe.healthLabels,
+							calories: recipeItem.recipe.calories / recipeItem.recipe.yield
+						});
+				});
+				// res.send(JSON.stringify(responseContainer));
+				sortByCount(res, responseContainer);
+			}
+			else {
+				return error;
+			}
+		});
+	}
 });
 
 router.get('/find/:id', function(req, res, next) {
