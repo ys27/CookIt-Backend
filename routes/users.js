@@ -26,7 +26,7 @@ router.get('/find/:_id', function(req, res, next) {
 });
 
 //Insert User
-router.put('/signup', function(req, res, next) {
+router.post('/signup', function(req, res, next) {
 	var newUserInfo = req.body;
 	console.log(newUserInfo);
 	newUserInfo.password = sha256(newUserInfo.password);
