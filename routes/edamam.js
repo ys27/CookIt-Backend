@@ -23,7 +23,20 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 		method: "GET"
 	}, (error, response, body) => {
 		if (!error) {
-			sortByCount(res, JSON.parse(body));
+			var responseContainer = [];
+			var bodyJSON = JSON.parse(body);
+
+			bodyJSON.hits.forEach(function(recipeItem)
+			{
+					responseContainer.push({
+						image: recipeItem.recipe.image,
+						label: recipeItem.recipe.label,
+						uri: recipeItem.recipe.uri,
+						healthLabels: recipeItem.recipe.healthLabels,
+						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
+					});
+			});
+			sortByCount(res, responseContainer);
 		}
 		else {
 			return error;
@@ -53,7 +66,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
 					});
 			});
-			sortByCount(res, JSON.stringify(responseContainer));
+			sortByCount(res, responseContainer);
 			// res.send(JSON.stringify(responseContainer));
 		}
 		else {
@@ -115,7 +128,7 @@ router.put('/find', function(req, res, next) {
 					});
 			});
 			// res.send(JSON.stringify(responseContainer));
-			sortByCount(res, JSON.stringify(responseContainer));
+			sortByCount(res, responseContainer);
 		}
 		else {
 			return error;
@@ -150,15 +163,14 @@ router.get('/find/:id', function(req, res, next) {
 	})
 });
 
-function sortByCount(res, json) {
+function sortByCount(res, recipes) {
 	console.log("beginning sorting")
-	var recipes = json.hits
 	var countArray = [];
 	async.series([
 	    function(callback) {
 			async.eachOfSeries(recipes, function (recipe, i, next) {
-				var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
-				var recipeId = recipes[i].recipe.uri.substring(index);
+				var index = recipes[i].uri.indexOf("recipe_") + 7;
+				var recipeId = recipes[i].uri.substring(index);
 				db.recipeCounts.findOne({"recipeId": recipeId}, function (err, recipeCount) {
 					if (err) {
 						res.send(err);
