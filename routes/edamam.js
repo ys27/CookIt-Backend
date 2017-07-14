@@ -79,7 +79,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 });
 
 router.put('/find', function(req, res, next) {
-	if (!keywords) {
+	if (!req.body.keywords) {
 		res.json({error: "Search requires at least one keyword."})
 	}
 	else {
