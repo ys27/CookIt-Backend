@@ -142,7 +142,7 @@ router.get('/find/:id', function(req, res, next) {
 		uri: host + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
-		if (!error) {
+		if (!error && !body.starsWith("<")) {
 			var bodyJSON = JSON.parse(body)
 			res.send(JSON.stringify({
 				uri: bodyJSON[0].uri,
