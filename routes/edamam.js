@@ -22,7 +22,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 		uri: host + keywords + limit,
 		method: "GET"
 	}, (error, response, body) => {
-		if (!error) {
+		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
 
@@ -52,7 +52,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 		uri: host + keywords + limit,
 		method: "GET"
 	}, (error, response, body) => {
-		if (!error) {
+		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
 
@@ -103,7 +103,7 @@ router.put('/find', function(req, res, next) {
 		uri: requestURL,
 		method: "GET"
 	}, (error, response, body) => {
-		if (!error) {
+		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
 
@@ -142,7 +142,6 @@ router.get('/find/:id', function(req, res, next) {
 		uri: host + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
-		console.log("TYPE",typeof body)
 		if (!error && !body.startsWith("<")) {
 			var bodyJSON = JSON.parse(body)
 			res.send(JSON.stringify({
