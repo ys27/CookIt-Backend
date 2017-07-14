@@ -36,7 +36,7 @@ router.post('/signup', function(req, res, next) {
 		}
 		if (user == null) {
 			console.log("USER DOES NOT EXIST YET")
-			db.users.insert(newUserInfo, function(err) {
+			db.users.insert(newUserInfo, function(err, user) {
 				if (err) {
 					res.send(err);
 				}
