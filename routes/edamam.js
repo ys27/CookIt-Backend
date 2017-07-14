@@ -80,7 +80,7 @@ router.put('/find', function(req, res, next) {
 	for (var i=0; i<req.body.keywords.length; i++) {
 		keywords += `&q=${req.body.keywords[i]}`;
 	}
-	var limit = req.body.limit ? `&from=0&to=${req.body.limit}` : "";
+	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	for (var i=0; i<req.body.diet.length; i++) {
 		diet += `&diet=${req.body.diet[i]}`;
 	}
