@@ -75,13 +75,16 @@ router.post('/login', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
-		else {
+		else if (user != null){
 			if (sha256(req.body.password) == user.password) {
 				res.json(user);
 			}
 			else {
 				res.json({});
 			}
+		}
+		else {
+			res.json({error: "Not an existing user"});
 		}
 	});
 });
