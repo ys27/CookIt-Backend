@@ -93,16 +93,21 @@ router.put('/find', function(req, res, next) {
 			bodyJSON.hits.forEach(function(recipeItem)
 			{
 					responseContainer.push({
-						uri: recipeItem.recipe.uri,
-						label: recipeItem.recipe.label,
+						// uri: recipeItem.recipe.uri,
+						// label: recipeItem.recipe.label,
+						// image: recipeItem.recipe.image,
+						// url: recipeItem.recipe.url,
+						// shareAs: recipeItem.recipe.shareAs,
+						// yield: recipeItem.recipe.yield,
+						// dietLabel: recipeItem.recipe.dietLabel,
+						// healthLabel: recipeItem.recipe.healthLabel,
+						// ingredientLines: recipeItem.recipe.ingredientLines,
+						// calories: recipeItem.recipe.calories,
 						image: recipeItem.recipe.image,
-						url: recipeItem.recipe.url,
-						shareAs: recipeItem.recipe.shareAs,
-						yield: recipeItem.recipe.yield,
-						dietLabel: recipeItem.recipe.dietLabel,
-						healthLabel: recipeItem.recipe.healthLabel,
-						ingredientLines: recipeItem.recipe.ingredientLines,
-						calories: recipeItem.recipe.calories,
+						label: recipeItem.recipe.label,
+						uri: recipeItem.recipe.uri,
+						healthLabels: recipeItem.recipe.healthLabels,
+						calories: recipeItem.recipe.calories / recipeItem.recipe.yield
 					});
 			});
 			res.send(JSON.stringify(responseContainer));
