@@ -10,18 +10,20 @@ var async = require('async');
 var querystring = require('querystring');
 var https = require('https');
 
-var app_id = '92e8e386';
-var app_key = '6d76b47efaeb85aba24ff109d9d82982';
-var host = `https://api.edamam.com/search?app_id=${app_id}&app_key=${app_key}`;
-
+var app_id = ['92e8e386', '878b5cbc', 'dd6cc1a2', 'caa454c9'];
+var app_key = ['6d76b47efaeb85aba24ff109d9d82982', 'd247acdf0e5f3b1eb9d8abf463c13a90', '1d45d1eeecb8e543724a96078d534dde', '2089d97e74613d7cc80402ebcdc5c0e5'];
+var host = `https://api.edamam.com/search?app_id=`;
+var keyToggle = 0;
 
 router.get('/find/keyword/:keyword', function(req, res, next) {
 	var keywords = `&q=${req.params.keyword}`;
 	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
-		uri: host + keywords + limit,
+		uri: host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit,
 		method: "GET"
 	}, (error, response, body) => {
+		console.log(host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit);
+		toggleKey();
 		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
@@ -49,9 +51,10 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 	var keywords = `&q=${req.params.keyword}`;
 	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
-		uri: host + keywords + limit,
+		uri: host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit,
 		method: "GET"
 	}, (error, response, body) => {
+		toggleKey();
 		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
@@ -100,11 +103,12 @@ router.put('/find', function(req, res, next) {
 		}
 
 	}
-	var requestURL = host + keywords + limit + diet + health + calories;
+	var requestURL = host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + keywords + limit + diet + health + calories;
 	request({
 		uri: requestURL,
 		method: "GET"
 	}, (error, response, body) => {
+		toggleKey();
 		if (!error && !body.startsWith("<")) {
 			var responseContainer = [];
 			var bodyJSON = JSON.parse(body);
@@ -141,9 +145,10 @@ router.put('/find', function(req, res, next) {
 router.get('/find/:id', function(req, res, next) {
 	var recipeURI = `&r=http://www.edamam.com/ontologies/edamam.owl%23recipe_${req.params.id}`;
 	request({
-		uri: host + recipeURI,
+		uri: host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + recipeURI,
 		method: "GET"
 	}, (error, response, body) => {
+		toggleKey();
 		if (!error && !body.startsWith("<")) {
 			var bodyJSON = JSON.parse(body)
 			res.send(JSON.stringify({
@@ -222,8 +227,12 @@ Array.prototype.move = function (old_index, new_index) {
         }
     }
     this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; // for testing purposes
+    return this;
 };
+
+function toggleKey() {
+	keyToggle = (keyToggle+1) % app_id.length;
+}
 
 
 module.exports = router;
