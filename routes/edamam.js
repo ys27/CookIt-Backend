@@ -6,6 +6,7 @@ var router = express.Router();
 
 var db = require('./db');
 
+var async = require('async');
 var querystring = require('querystring');
 var https = require('https');
 
@@ -22,8 +23,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 		method: "GET"
 	}, (error, response, body) => {
 		if (!error) {
-			var bodyJSON = JSON.parse(body);
-			// sortByCount(bodyJSON);
+			var bodyJSON = sortByCount(JSON.parse(body));
 			res.send(bodyJSON);
 		}
 		else {
@@ -145,9 +145,15 @@ router.get('/find/:id', function(req, res, next) {
 });
 
 function sortByCount(json) {
-	console.log("sorting")
+	console.log("beginning sorting")
+	var countArray = readInCount(json.hits);
+	var sortedCountArray = sortCountArray(countArray);
+	var mergedCountArray = mergeCountArray(json.hits, sortedCountArray);
+	return mergedCountArray;
+}
+
+function readInCount(recipes) {
 	var countArray = [];
-	var recipes = json.hits;
 	for (var i=0; i<recipes.length; i++) {
 		var index = recipes[i].recipe.uri.indexOf("recipe_") + 7;
 		var recipeId = recipes[i].recipe.uri.substring(index);
@@ -156,7 +162,7 @@ function sortByCount(json) {
 				res.send(err);
 			}
 			if (recipeCount != null) {
-				console.log(recipeCount)
+				console.log(recipeCount, i)
 				countArray.push({
 					recipeCount: recipeCount,
 					index: i
@@ -164,11 +170,21 @@ function sortByCount(json) {
 			}
 		});
 	}
-	countArray.sort(function(a,b) {
+	return countArray;
+};
+
+function sortCountArray(countArray) {
+	return sortedCountArray = countArray.sort(function(a,b) {
 		return a.recipeCount.recipeCount - b.recipeCount.recipeCount;
 	});
-	console.log(countArray)
-};
+}
+
+function mergeCountArray(recipes, sortedCountArray) {
+	for (var i=0; i<sortedCountArray.length; i++) {
+		recipes.move(sortedCountArray[i].index, i);
+	}
+	return recipes;
+}
 
 Array.prototype.move = function (old_index, new_index) {
     if (new_index >= this.length) {

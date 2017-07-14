@@ -43,6 +43,7 @@ router.put('/update/:_id', function(req, res, next) {
 		if (err) {
 			res.send(err);
 		}
+		console.log(req.body);
 		res.send("updated user" + req.params._id);
 	});
 });
