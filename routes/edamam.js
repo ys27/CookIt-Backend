@@ -149,14 +149,9 @@ router.get('/find/:id', function(req, res, next) {
 	})
 });
 
-async function sortByCount(json) {
+function sortByCount(json) {
 	console.log("beginning sorting")
-	var countArray = await readInCount(json.hits);
-	// var sortedCountArray = await sortCountArray(countArray);
-	// return mergedCountArray = await mergeCountArray(json.hits, sortedCountArray);
-}
-
-async function readInCount(recipes) {
+	var recipes = json.hits
 	var countArray = [];
 	var sortedRecipe = [];
 	async.series([
@@ -212,19 +207,6 @@ async function readInCount(recipes) {
 		}
 	}
 };
-
-function sortCountArray(countArray) {
-	return sortedCountArray = countArray.sort(function(a,b) {
-		return b.recipeCount.recipeCount - a.recipeCount.recipeCount;
-	});
-}
-
-function mergeCountArray(recipes, sortedCountArray) {
-	for (var i=0; i<sortedCountArray.length; i++) {
-		recipes.move(sortedCountArray[i].index, i);
-	}
-	return recipes;
-}
 
 Array.prototype.move = function (old_index, new_index) {
     if (new_index >= this.length) {

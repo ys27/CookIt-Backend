@@ -28,6 +28,7 @@ router.get('/find/:_id', function(req, res, next) {
 //Insert User
 router.put('/signup', function(req, res, next) {
 	var newUserInfo = req.body;
+	console.log(newUserInfo);
 	newUserInfo.password = sha256(newUserInfo.password);
 	db.users.findOne({"email": newUserInfo.email}, function(err, user) {
 		if (err) {
