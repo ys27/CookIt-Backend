@@ -8,7 +8,7 @@ var seenRecipePoints = 1;
 var usedRecipePoints = 5;
 
 //Get All Recipe Counts
-router.get('/getAll', function(req, res, next) {
+router.get('/', function(req, res, next) {
 	db.recipeCounts.find(function(err, recipeCounts) {
 		if (err) {
 			res.send(err);
@@ -18,7 +18,7 @@ router.get('/getAll', function(req, res, next) {
 });
 
 //Get Individual Recipe Count
-router.get('/get/:recipeId', function(req, res, next) {
+router.get('/:recipeId', function(req, res, next) {
 	db.recipeCounts.findOne({"recipeId": req.params.recipeId}, function(err, recipeCount) {
 		if (err) {
 			res.send(err);
@@ -28,7 +28,7 @@ router.get('/get/:recipeId', function(req, res, next) {
 });
 
 //Insert New or increment count
-router.get('/seen/:recipeId', function(req, res, next) {
+router.put('/seen/:recipeId', function(req, res, next) {
 	db.recipeCounts.findOne({"recipeId": req.params.recipeId}, function(err, recipeCount) {
 		if (err) {
 			res.send(err);
@@ -54,7 +54,7 @@ router.get('/seen/:recipeId', function(req, res, next) {
 	});
 });
 
-router.get('/used/:recipeId', function(req, res, next) {
+router.put('/used/:recipeId', function(req, res, next) {
     db.recipeCounts.update({"recipeId": req.params.recipeId}, {
         $inc: {
             recipeCount: usedRecipePoints - seenRecipePoints
@@ -63,7 +63,7 @@ router.get('/used/:recipeId', function(req, res, next) {
 	res.send("used");
 });
 
-router.get('/unused/:recipeId', function(req, res, next) {
+router.put('/unused/:recipeId', function(req, res, next) {
     db.recipeCounts.update({"recipeId": req.params.recipeId}, {
         $inc: {
             recipeCount: seenRecipePoints - usedRecipePoints
@@ -73,13 +73,13 @@ router.get('/unused/:recipeId', function(req, res, next) {
 });
 
 //Reset Recipe Count
-router.get('/reset/:recipeId', function(req, res, next) {
+router.put('/reset/:recipeId', function(req, res, next) {
 	db.recipeCounts.remove({"recipeId": req.params.recipeId});
 	res.send("reset counts for: " + req.params.recipeI);
 });
 
 //Reset All Recipe Counts
-router.get('/resetAll/', function(req, res, next) {
+router.put('/resetAll/', function(req, res, next) {
 	db.recipeCounts.remove({});
 	res.send("reset counts for all");
 });

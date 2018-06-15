@@ -15,7 +15,7 @@ var app_key = ['6d76b47efaeb85aba24ff109d9d82982', 'd247acdf0e5f3b1eb9d8abf463c1
 var host = `https://api.edamam.com/search?app_id=`;
 var keyToggle = 0;
 
-router.get('/find/keyword/:keyword', function(req, res, next) {
+router.get('/keyword/:keyword', function(req, res, next) {
 	var keywords = `&q=${req.params.keyword}`;
 	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
@@ -47,7 +47,7 @@ router.get('/find/keyword/:keyword', function(req, res, next) {
 });
 
 //Get 20 Popular RecipesQQQQ
-router.get('/find/popular/:keyword', function(req, res, next) {
+router.get('/popular/:keyword', function(req, res, next) {
 	var keywords = `&q=${req.params.keyword}`;
 	var limit = req.query.start ? "&from=" + req.query.start +  "&to=" + (parseInt(req.query.start) + 5) : "&from=0&to=20";
 	request({
@@ -78,7 +78,7 @@ router.get('/find/popular/:keyword', function(req, res, next) {
 	})
 });
 
-router.put('/find', function(req, res, next) {
+router.post('/', function(req, res, next) {
 	if (!req.body.keywords) {
 		res.json({error: "Search requires at least one keyword."})
 	}
@@ -147,7 +147,7 @@ router.put('/find', function(req, res, next) {
 	}
 });
 
-router.get('/find/:id', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
 	var recipeURI = `&r=http://www.edamam.com/ontologies/edamam.owl%23recipe_${req.params.id}`;
 	request({
 		uri: host + `${app_id[keyToggle]}&app_key=${app_key[keyToggle]}` + recipeURI,

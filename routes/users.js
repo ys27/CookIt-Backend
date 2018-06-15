@@ -6,7 +6,7 @@ var router = express.Router();
 var db = require('./db');
 
 //Get All Users
-router.get('/findAll', function(req, res, next) {
+router.get('/', function(req, res, next) {
 	db.users.find(function(err, users) {
 		if (err) {
 			res.send(err);
@@ -16,7 +16,7 @@ router.get('/findAll', function(req, res, next) {
 });
 
 //Get Individual User
-router.get('/find/:_id', function(req, res, next) {
+router.get('/:_id', function(req, res, next) {
 	db.users.findOne({"_id": mongojs.ObjectID(req.params._id)}, function(err, user) {
 		if (err) {
 			res.send(err);
@@ -81,7 +81,7 @@ router.post('/fbLogin', function(req, res, next) {
 });
 
 //Update User
-router.put('/update/:_id', function(req, res, next) {
+router.put('/:_id', function(req, res, next) {
 	db.users.update({_id: mongojs.ObjectID(req.params._id)}, {$set: req.body}, function(err) {
 		if (err) {
 			res.send(err);
@@ -92,7 +92,7 @@ router.put('/update/:_id', function(req, res, next) {
 });
 
 //Delete User
-router.get('/delete/:_id', function(req, res, next) {
+router.delete('/:_id', function(req, res, next) {
 	db.users.remove({_id: mongojs.ObjectID(req.params._id)}, function(err) {
 		if (err) {
 			res.send(err);
